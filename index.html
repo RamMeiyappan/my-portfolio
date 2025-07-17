@@ -3,624 +3,459 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Meiyappan Rm - Interactive Resume</title>
+    <title>Your Name - Resume</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #F8F8F8; /* Softer, slightly off-white background */
-            color: #2D3748; /* Darker text for better contrast */
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
         }
-        .header-bg {
-            background-color: #ffffff; /* White background for header */
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); /* More visible shadow */
-        }
-        .nav-link {
-            transition: color 0.3s ease-in-out;
-            color: #4A5568; /* Default text color for links */
-        }
-        .nav-link:hover {
-            color: #008080; /* Darker teal on hover */
-        }
-        .timeline-item-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.6s ease-in-out, padding 0.6s ease-in-out;
-            padding: 0 1.5rem; /* Slightly more padding */
-        }
-        .timeline-item-content.expanded {
-            max-height: 600px; /* Increased max-height for content */
-            padding: 1.5rem;
-        }
-        .timeline-icon {
-            background-color: #008080; /* Stronger teal for timeline icons */
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            transition: transform 0.2s ease-in-out;
-        }
-        .timeline-icon:hover {
-                transform: scale(1.1);
-        }
-        .timeline-line {
-            background-color: #A0D8D8; /* Lighter, more noticeable line */
-        }
-        .tag {
-            transition: all 0.2s ease-in-out;
-            background-color: #E6FFFA; /* Lighter teal background */
-            color: #2C7A7B; /* Darker teal text */
-            font-weight: 500;
-        }
-        .tag:hover {
-            transform: translateY(-3px); /* More pronounced lift */
-            box-shadow: 0 6px 10px -1px rgba(0, 0, 0, 0.1), 0 3px 6px -1px rgba(0, 0, 0, 0.08); /* Stronger shadow */
-            background-color: #B2F5EA; /* Slightly darker on hover */
-        }
-        .chart-container {
-            position: relative; 
-            width: 100%; 
-            max-width: 600px; 
-            margin-left: auto; 
-            margin-right: auto; 
-            height: 300px;
-            max-height: 400px;
-        }
-        @media (min-width: 768px) {
-            .chart-container { 
-                height: 400px; 
-            }
-        }
-
-        /* Styles for the image modal/overlay */
-        .image-modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            visibility: hidden;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
-        }
-        .image-modal-overlay.visible {
-            visibility: visible;
-            opacity: 1;
-        }
-        .image-modal-content {
-            max-width: 90%;
-            max-height: 90%;
-            object-fit: contain;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
             border-radius: 8px;
         }
+        h1, h2, h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        section:last-child {
+            border-bottom: none;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        ul li {
+            margin-bottom: 8px;
+        }
+        .badges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 20px;
+            justify-items: center;
+            margin-top: 20px;
+        }
+        .badge-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .badge-item:hover {
+            transform: translateY(-5px);
+        }
+        .badge-item img {
+            max-width: 100px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .badge-item span {
+            margin-top: 8px;
+            font-size: 0.9em;
+            color: #555;
+        }
+        .timeline {
+            position: relative;
+            margin: 50px 0;
+        }
+        .timeline::before {
+            content: '';
+            position: absolute;
+            width: 2px;
+            background-color: #ddd;
+            top: 0;
+            bottom: 0;
+            left: 20px;
+        }
+        .timeline-item {
+            margin-bottom: 40px;
+            position: relative;
+            padding-left: 50px;
+        }
+        .timeline-item-icon {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #007bff; /* Primary color */
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 0 0 5px white;
+        }
+        .timeline-item-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+        .timeline-item-content h3 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            color: #007bff;
+        }
+        .timeline-item-content p {
+            margin: 0;
+            font-size: 0.9em;
+            color: #666;
+        }
+        .contact-info {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .contact-info div {
+            flex: 1 1 200px; /* Allows items to wrap */
+        }
 
-        /* --- Print Specific Styles --- */
-        @media print {
-            body {
-                background-color: #ffffff;
-                color: #000000;
-                -webkit-print-color-adjust: exact; /* For background colors to print */
-                print-color-adjust: exact;
-            }
-            header, footer, .print-button, .download-button, .image-modal-overlay { /* Hide both buttons and modal */
-                display: none !important; 
-            }
-            main {
-                margin: 0;
-                padding: 0;
-                max-width: none;
-                width: 100%;
-            }
-            section {
-                margin-bottom: 1rem !important; /* Reduce space between sections for print */
-                page-break-inside: avoid; /* Avoid breaking sections across pages */
-            }
-            h1, h2, h3, h4 {
-                color: #000000 !important; /* Ensure headings are black */
-            }
-            .timeline-item-content {
-                max-height: none !important; /* Expand all timeline content */
-                overflow: visible !important;
-                padding: 0.5rem 1rem !important;
-            }
-            .timeline-item {
-                margin-bottom: 0.5rem !important; /* Reduce gap between timeline items */
-            }
-            .timeline-line, .timeline-icon {
-                display: none !important; /* Hide the interactive timeline elements for print */
-            }
-            .timeline-item > div { /* Adjust width of content for non-interactive print layout */
-                width: 100% !important;
-                padding-left: 0 !important;
-                padding-right: 0 !important;
-            }
-            .bg-white, .bg-gray-50\/50, .border, .shadow-md, .shadow-sm {
-                background-color: #ffffff !important; /* Ensure elements are white on print */
-                box-shadow: none !important; /* Remove shadows */
-                border: none !important; /* Remove borders for cleaner look */
-            }
-            .tag {
-                background-color: #E6FFFA !important; /* Keep a hint of color for tags if desired */
-                color: #2C7A7B !important; 
-                border: 1px solid #B2F5EA !important;
-                box-shadow: none !important;
-            }
-            ul.list-disc {
-                list-style-type: disc !important;
-                margin-left: 1.5rem !important;
-            }
-            ul.list-inside {
-                list-style-position: inside !important;
-            }
-            strong {
-                color: #000000 !important; /* Ensure bold text is black */
-            }
-            a {
-                color: #0000EE !important; /* Default link blue */
-                text-decoration: underline !important;
-            }
-            /* Specific adjustments for skills list to ensure it's readable */
-            #tech-skills-list .md\:col-span-2 {
-                grid-column: span 5 / span 5 !important; /* Make skills list span full width for print */
-                margin-top: 1rem;
-            }
-            #skillsChart {
-                display: none !important; /* Hide the chart for print */
-            }
+        /* Modal specific styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            border-radius: 8px;
+            width: 80%; /* Could be responsive */
+            max-width: 500px; /* Max width for images */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .modal-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin-bottom: 15px;
+        }
+        .modal-content h3 {
+            margin-top: 0;
+            color: #333;
+            text-align: center;
+        }
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
         }
     </style>
 </head>
-<body class="antialiased">
+<body>
+    <div class="container">
+        <header class="text-center mb-10">
+            <h1 id="name" class="text-4xl font-bold"></h1>
+            <p id="tagline" class="text-lg text-gray-600"></p>
+        </header>
 
-    <header id="home" class="sticky top-0 header-bg backdrop-blur-sm z-10">
-        <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
-            <a href="#home" class="text-2xl font-bold text-gray-900">Meiyappan Rm</a>
-            <div class="hidden md:flex space-x-8 items-center">
-                <a href="#experience" class="nav-link text-lg">Experience</a>
-                <a href="#skills" class="nav-link text-lg">Skills</a>
-                <a href="#education" class="nav-link text-lg">Education</a>
-                
-                <a href="https://raw.githubusercontent.com/RamMeiyappan/my-portfolio/92e0f2617a30502863ea78e5858d9ac2d8f5d5ca/MENA%20CV%20PDF%20MAY%2023.pdf" download="MENA CV PDF MAY 23.pdf" class="download-button bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-full shadow-lg transition duration-300 ease-in-out">
-                    Download CV (PDF)
-                </a>
-
-                <button onclick="window.print()" class="print-button bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-5 rounded-full shadow-lg transition duration-300 ease-in-out">
-                    Print / Save as PDF
-                </button>
-            </div>
-        </nav>
-    </header>
-
-    <main class="container mx-auto px-6 py-16">
-        <section class="text-center mb-20">
-            <h1 class="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">Project Manager & Implementation Leader</h1>
-            <p class="max-w-4xl mx-auto text-gray-700 text-lg mb-8 leading-relaxed">
-                A highly effective **Project Manager and Senior Implementation Leader** with over **15 years of impactful experience**. I specialize in spearheading **SaaS-based implementations, ERP, and LMS rollouts** across diverse global markets. My expertise lies in end-to-end project execution, fostering robust cross-functional collaboration, proactive risk mitigation, and ensuring seamless post-go-live support. As a **Certified Scrum Product Owner (CSPO)**, I consistently deliver complex projects on time, within scope, and exceeding stakeholder expectations.
-            </p>
-            <div class="flex justify-center items-center space-x-6 text-base text-gray-600 font-medium">
-                <span>📞 +91 9487413140</span>
-                <span class="text-gray-400">|</span>
-                <span>📧 mena@aol.in</span>
-                <span class="text-gray-400">|</span>
-                <a href="https://linkedin.com/in/ramamena" target="_blank" class="nav-link flex items-center">
-                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.02h-2.5v16.48h2.5v-16.48zm7.98 0h-2.5v16.48h2.5v-8.79c0-4.09 3.06-4.48 3.73-1.61v10.4h2.5v-10.7c0-5.84-3.56-6.47-5.46-2.58z"></path></svg>
-                    LinkedIn
-                </a>
-            </div>
+        <section id="about-section">
+            <h2 class="text-2xl font-semibold mb-4">About Me</h2>
+            <p id="about-text"></p>
         </section>
 
-        <hr class="border-t border-gray-300 my-16">
-
-        <section class="mb-20">
-            <h2 class="text-4xl font-bold text-center mb-10 text-gray-900">Core Competencies</h2>
-            <div id="competencies" class="flex flex-wrap justify-center gap-4">
-                </div>
-        </section>
-        
-        <hr class="border-t border-gray-300 my-16">
-
-        <section id="experience" class="mb-20">
-            <h2 class="text-4xl font-bold text-center mb-14 text-gray-900">Professional Experience</h2>
-            <p class="text-center text-gray-700 text-lg mb-14 max-w-3xl mx-auto">
-                A journey of growth and impact. My career has been focused on delivering complex technical solutions and driving operational excellence. Click on any role to see the key achievements and responsibilities.
-            </p>
-            <div id="timeline" class="relative max-w-4xl mx-auto">
-                <div class="absolute left-1/2 h-full w-1 bg-teal-300 transform -translate-x-1/2 timeline-line"></div>
-                </div>
+        <section id="experience-section">
+            <h2 class="text-2xl font-semibold mb-4">Experience</h2>
+            <div id="experience-list" class="timeline"></div>
         </section>
 
-        <hr class="border-t border-gray-300 my-16">
-
-        <section id="skills" class="mb-20">
-            <h2 class="text-4xl font-bold text-center mb-14 text-gray-900">Technical Skills & Proficiencies</h2>
-            <p class="text-center text-gray-700 text-lg mb-14 max-w-3xl mx-auto">
-                A versatile skill set for modern project challenges. The chart below highlights core strengths, followed by a detailed list of the technical tools I command.
-            </p>
-            <div class="grid md:grid-cols-5 gap-16 items-center">
-                <div class="md:col-span-3">
-                    <div class="chart-container shadow-lg rounded-lg p-4 bg-white">
-                        <canvas id="skillsChart"></canvas>
-                    </div>
-                </div>
-                <div id="tech-skills-list" class="md:col-span-2 space-y-8 bg-white p-6 rounded-lg shadow-md border border-gray-100">
-                    </div>
-            </div>
+        <section id="education-section">
+            <h2 class="text-2xl font-semibold mb-4">Education</h2>
+            <div id="education-list" class="timeline"></div>
         </section>
 
-        <hr class="border-t border-gray-300 my-16">
-
-        <section id="education">
-            <h2 class="text-4xl font-bold text-center mb-14 text-gray-900">Education & Certifications</h2>
-            <div id="education-list" class="max-w-5xl mx-auto grid md:grid-cols-2 gap-10">
-                </div>
+        <section id="skills-section">
+            <h2 class="text-2xl font-semibold mb-4">Skills</h2>
+            <div id="skills-list"></div>
         </section>
-    </main>
-    
-    <footer class="text-center py-8 mt-20 border-t border-gray-200 bg-gray-50 text-gray-600">
+
+        <section id="awards-section">
+            <h2 class="text-2xl font-semibold mb-4">Awards & Recognition</h2>
+            <div id="awards-list" class="timeline"></div>
+        </section>
+
+        <section id="badges-section">
+            <h2 class="text-2xl font-semibold mb-4">Certifications & Badges</h2>
+            <div id="badges-grid" class="badges-grid"></div>
+        </section>
+
+        <section id="contact-section">
+            <h2 class="text-2xl font-semibold mb-4">Contact</h2>
+            <div id="contact-info" class="contact-info"></div>
+        </section>
+
+        <footer>
+            <p class="text-center text-gray-500 text-sm mt-10">&copy; <span id="current-year"></span> Your Name. All rights reserved.</p>
         </footer>
+    </div>
 
-    <div id="imageModal" class="image-modal-overlay">
-        <img id="modalImage" class="image-modal-content" src="" alt="Enlarged Image">
+    <div id="badgeModal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h3 id="modalBadgeName"></h3>
+            <img id="modalBadgeImage" src="" alt="Badge">
+        </div>
     </div>
 
     <script>
         const resumeData = {
-            competencies: [
-                "Project Lifecycle Management", "SaaS Implementation", "Stakeholder Engagement",
-                "Agile & Waterfall Delivery", "Team Leadership", "Risk & Issue Management",
-                "Client Onboarding", "KPI Tracking", "UAT & QA", "Process Optimization",
-                "CRM Platforms", "Cross-Functional Collaboration", "Change Management",
-                "Vendor Management", "Budgeting & Forecasting", "Post-Go-Live Support"
-            ],
+            name: "Your Name Here",
+            tagline: "Your Professional Tagline",
+            about: "A dedicated and results-driven professional with experience in [Your Field]. Passionate about [Your Passion] and committed to [Your Goal]. Adaptable and eager to learn new technologies and methodologies.",
             experience: [
                 {
-                    role: "Associate Manager – Implementation & Onboarding",
-                    company: "MediaMint, Hyderabad",
-                    period: "Oct 2024 – Present",
-                    details: [
-                        "Delivered **30+ projects** with **95% on-time rate** and high stakeholder satisfaction.",
-                        "Cut delays by **20%** via resource optimization and cross-functional planning.",
-                        "Built dashboards to accelerate executive decisions by **40%**.",
-                        "Reduced onboarding time by **35%** using standardized SOPs.",
-                        "Improved productivity by **40%** through automation.",
-                        "Ensured **100% successful handovers** to customer success teams."
-                    ]
+                    title: "Senior Developer",
+                    company: "Tech Solutions Inc.",
+                    duration: "Jan 2020 - Present",
+                    description: "Led a team of 5 developers in designing and implementing scalable web applications. Introduced agile methodologies, reducing project delivery time by 15%.",
+                    icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 0 00-2 2v10a2 0 002 2h12a2 0 002-2V6a2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>` // Briefcase icon SVG
                 },
                 {
-                    role: "Manager – Implementation",
-                    company: "Disprz, Chennai",
-                    period: "Jul 2023 – Mar 2024",
-                    details: [
-                        "Delivered **16+ successful LMS/LXP implementations** across APAC, ME, and NA.",
-                        "Boosted presales win rate by **35%** through demos and tailored solutions.",
-                        "Reduced go-live time by **15%** by enhancing team collaboration.",
-                        "Achieved **100% SLA adherence** with structured governance."
-                    ]
-                },
-                {
-                    role: "Senior Advisor – Project/Program Management",
-                    company: "Dell Technologies, Bangalore",
-                    period: "Apr 2022 – Apr 2023",
-                    details: [
-                        "Rolled out Dell Sales Application across **24+ countries** (EMEA/APJC).",
-                        "Drove **95% user adoption** in 3 months.",
-                        "Trained **1,500+ stakeholders**; reduced support tickets by **40%**.",
-                        "Standardized messaging for improved engagement and tracking."
-                    ]
-                },
-                {
-                    role: "Manager – Implementation",
-                    company: "Octoze Technologies, Chennai",
-                    period: "Jul 2020 – Jan 2022",
-                    details: [
-                        "Delivered ERP solutions with **100% on-time and in-scope completion**.",
-                        "Improved efficiency with workshops and templates.",
-                        "Strengthened cross-functional coordination."
-                    ]
-                },
-                {
-                    role: "Training & Implementation",
-                    company: "Extramarks Education, Chennai",
-                    period: "Jan 2011 – Jul 2020",
-                    details: [
-                        "Onboarded and trained **300+ schools** across India.",
-                        "Delivered **500+ sessions** for K-12 teachers.",
-                        "Managed cloud-based ERP rollouts with **95% client retention**.",
-                        "Contributed to **25% revenue growth** through sales collaboration."
-                    ]
+                    title: "Junior Software Engineer",
+                    company: "Innovate Co.",
+                    duration: "July 2017 - Dec 2019",
+                    description: "Developed and maintained front-end components using React.js. Participated in code reviews and contributed to improving coding standards.",
+                    icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 0 00-2 2v10a2 0 002 2h12a2 0 002-2V6a2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>`
                 }
             ],
-            skills: {
-                chartData: {
-                    labels: ['Project Management', 'SaaS Implementation', 'Stakeholder Comms', 'Agile Delivery', 'Risk Management', 'Team Leadership'],
-                    data: [95, 90, 95, 85, 90, 80],
-                },
-                tech: [
-                    { category: 'Project Tools', items: 'Jira, MS Project, Confluence, Trello, ClickUp, Asana' },
-                    { category: 'CRM', items: 'Salesforce, HubSpot, Zoho, Zendesk, Intercom, Freshdesk' },
-                    { category: 'Cloud & BI', items: 'Microsoft Azure, AWS (basic), Power BI, Tableau (basic)' },
-                    { category: 'Automation & APIs', items: 'Postman, Zapier, UAT, BRD/PRD, Flowcharting' },
-                    { category: 'Web & Data', items: 'HTML, CSS, MongoDB, MySQL, SQL' },
-                    { category: 'E-commerce', items: 'Amazon, Shopify, Walmart, ChannelAdvisor, Magento' }
-                ]
-            },
             education: [
                 {
-                    degree: "MBA, Business Administration",
-                    institution: "Tamil Nadu Open University",
-                    year: "2020"
+                    title: "Master of Science in Computer Science",
+                    institution: "University of Technology",
+                    duration: "2015 - 2017",
+                    description: "Specialized in Artificial Intelligence and Machine Learning. Thesis: 'Predictive Models for Urban Traffic Patterns'.",
+                    icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" /></svg>` // Eye icon SVG for education (placeholder)
                 },
                 {
-                    degree: "BBA, Business Administration",
-                    institution: "Tamil Nadu Open University",
-                    year: "2011"
+                    title: "Bachelor of Engineering in Electronics & Communication",
+                    institution: "Engineering College",
+                    duration: "2011 - 2015",
+                    description: "Focused on digital signal processing and embedded systems. Graduated with First Class Honors.",
+                    icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" /></svg>`
                 }
             ],
-            certifications: [
-                "Certified Scrum Product Owner® (CSPO) – 2024",
-                "PMP® (in progress – scheduled July)",
-                "Agile with Atlassian Jira",
-                "Azure Essentials",
-                "Agile Scrum Master",
-                "Certified Associate in Project Management (CAPM)",
-                "ITIL® Foundation Certification"
+            skills: [
+                { category: "Programming Languages", items: ["Python", "JavaScript", "Java", "C++"] },
+                { category: "Web Technologies", items: ["React", "Node.js", "HTML5", "CSS3", "Tailwind CSS"] },
+                { category: "Databases", items: ["SQL", "MongoDB", "PostgreSQL"] },
+                { category: "Cloud Platforms", items: ["AWS", "Azure"] },
+                { category: "Tools & Methodologies", items: ["Git", "Docker", "Agile", "Scrum"] }
+            ],
+            awards: [
+                {
+                    title: "Employee of the Year",
+                    organization: "Tech Solutions Inc.",
+                    year: "2022",
+                    description: "Awarded for outstanding contributions to the flagship product development and team leadership.",
+                    icon: `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" /></svg>` // Checkmark icon SVG
+                }
             ],
             badges: [
-                { 
-                    name: "CSPO Badge", 
-                    imageUrl: "https://bcert.me/bc/html/img/badges/generated/badge-7224.png", 
-                    linkUrl: "https://bcert.me/bc/html/show-badge.html?b=gcgdpdgm",
-                    type: "link" // New type property
+                {
+                    name: "CSPO Badge",
+                    imageUrl: "https://bcert.me/bc/html/img/badges/generated/badge-7224.png",
+                    type: "modal" // Set to 'modal'
                 },
-                { 
-                    name: "PMI Member Badge", 
-                    imageUrl: "pmimember.jpg", // <--- UPDATED HERE
-                    type: "modal" // New type property
+                {
+                    name: "PMI Member Badge",
+                    imageUrl: "pmimember.jpg", // Ensure this file is in the same directory as index.html
+                    type: "modal"
                 }
-            ]
+            ],
+            contact: {
+                email: "your.email@example.com",
+                phone: "+1234567890",
+                linkedin: "linkedin.com/in/yourprofile",
+                github: "github.com/yourusername",
+                location: "Kondapur, Telangana, India"
+            }
         };
 
-        function populateCompetencies() {
-            const container = document.getElementById('competencies');
-            resumeData.competencies.forEach(comp => {
-                const tag = document.createElement('span');
-                tag.className = 'tag bg-teal-100 text-teal-800 text-sm font-medium px-4 py-2 rounded-full shadow-sm';
-                tag.textContent = comp;
-                container.appendChild(tag);
-            });
-        }
-
-        function populateTimeline() {
-            const timeline = document.getElementById('timeline');
-            resumeData.experience.forEach((job, index) => {
-                const isLeft = index % 2 === 0;
-                const timelineItem = document.createElement('div');
-                timelineItem.className = `timeline-item mb-12 flex items-center ${isLeft ? 'justify-start flex-row-reverse' : 'justify-start'}`;
-
-                const contentWrapper = document.createElement('div');
-                contentWrapper.className = `w-1/2 ${isLeft ? 'pr-10 text-right' : 'pl-10 text-left'}`;
-
-                const itemBox = document.createElement('div');
-                itemBox.className = 'bg-white border border-gray-200 rounded-lg shadow-xl cursor-pointer hover:shadow-2xl transition-shadow duration-300';
-
-                const header = document.createElement('div');
-                header.className = 'p-6 pb-2 rounded-t-lg';
-                header.innerHTML = `
-                    <p class="font-bold text-xl text-gray-900 mb-1">${job.role}</p>
-                    <p class="text-teal-700 font-semibold text-lg mb-1">${job.company}</p>
-                    <p class="text-sm text-gray-500">${job.period}</p>
-                `;
-
-                const content = document.createElement('div');
-                content.className = 'timeline-item-content bg-gray-50/70 rounded-b-lg border-t border-gray-100';
-                content.innerHTML = `<ul class="list-disc list-inside space-y-2 text-gray-700 text-base leading-relaxed">${job.details.map(d => `<li>${d}</li>`).join('')}</ul>`;
-
-                itemBox.appendChild(header);
-                itemBox.appendChild(content);
-                itemBox.onclick = (e) => {
-                    if (e.target.tagName === 'A') return; 
-                    content.classList.toggle('expanded');
-                    if (content.classList.contains('expanded')) {
-                        content.style.maxHeight = content.scrollHeight + 30 + 'px';
-                    } else {
-                        content.style.maxHeight = '0';
-                    }
-                };
-                contentWrapper.appendChild(itemBox);
-
-                const iconWrapper = document.createElement('div');
-                iconWrapper.className = `absolute left-1/2 transform -translate-x-1/2 z-10`;
-
-                const icon = document.createElement('div');
-                icon.className = `timeline-icon flex items-center justify-center w-10 h-10 bg-teal-600 rounded-full text-white flex-shrink-0`;
-                icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 0 00-2 2v10a2 0 002 2h12a2 0 002-2V6a2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>`;
-
-                iconWrapper.appendChild(icon);
-
-                if (isLeft) {
-                    timelineItem.appendChild(iconWrapper);
-                    timelineItem.appendChild(contentWrapper);
-                } else {
-                    timelineItem.appendChild(contentWrapper);
-                    timelineItem.appendChild(iconWrapper);
-                }
-                
-                timeline.appendChild(timelineItem);
-            });
-        }
-        
-        function populateSkills() {
-            const ctx = document.getElementById('skillsChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'radar',
-                data: {
-                    labels: resumeData.skills.chartData.labels,
-                    datasets: [{
-                        label: 'Proficiency',
-                        data: resumeData.skills.chartData.data,
-                        backgroundColor: 'rgba(0, 128, 128, 0.3)',
-                        borderColor: 'rgba(0, 128, 128, 1)',
-                        pointBackgroundColor: 'rgba(0, 128, 128, 1)',
-                        pointBorderColor: '#fff',
-                        pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgba(0, 128, 128, 1)',
-                        borderWidth: 2
-                    }]
-                },
-                options: {
-                    maintainAspectRatio: false,
-                    scales: {
-                        r: {
-                            angleLines: { color: 'rgba(0, 0, 0, 0.15)' },
-                            grid: { color: 'rgba(0, 0, 0, 0.15)' },
-                            pointLabels: { font: { size: 13, weight: 'bold' }, color: '#4A5568' },
-                            ticks: {
-                                backdropColor: 'transparent',
-                                stepSize: 20,
-                                color: '#4A5568'
-                            },
-                            suggestedMin: 0,
-                            suggestedMax: 100
-                        }
-                    },
-                    plugins: {
-                        legend: { display: false },
-                        tooltip: {
-                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
-                            titleColor: '#fff',
-                            bodyColor: '#fff',
-                            callbacks: {
-                                label: function(context) {
-                                    return context.label + ': ' + context.raw + '%';
-                                }
-                            }
-                        }
-                    }
-                }
-            });
-
-            const techListContainer = document.getElementById('tech-skills-list');
-            resumeData.skills.tech.forEach(skillCat => {
-                const div = document.createElement('div');
-                div.innerHTML = `
-                    <h4 class="font-bold text-lg text-gray-800 mb-1">${skillCat.category}</h4>
-                    <p class="text-gray-600 text-sm leading-relaxed">${skillCat.items}</p>
-                `;
-                techListContainer.appendChild(div);
-            });
-        }
-        
-        function populateEducation() {
-            const eduContainer = document.getElementById('education-list');
-            
-            const eduDiv = document.createElement('div');
-            eduDiv.className = 'bg-white p-8 rounded-lg border border-gray-200 shadow-md';
-            let eduHtml = '<h3 class="text-2xl font-bold mb-6 text-gray-900">Education</h3><div class="space-y-6">';
-            resumeData.education.forEach(edu => {
-                eduHtml += `
-                    <div>
-                        <p class="font-semibold text-gray-800 text-lg">${edu.degree}</p>
-                        <p class="text-gray-600">${edu.institution} - ${edu.year}</p>
-                    </div>
-                `;
-            });
-            eduDiv.innerHTML = eduHtml + '</div>';
-
-            const certDiv = document.createElement('div');
-            certDiv.className = 'bg-white p-8 rounded-lg border border-gray-200 shadow-md';
-            let certHtml = '<h3 class="text-2xl font-bold mb-6 text-gray-900">Certifications</h3><ul class="space-y-3 list-disc list-inside text-gray-700 text-base">';
-            resumeData.certifications.forEach(cert => {
-                certHtml += `<li>${cert}</li>`;
-            });
-            certHtml += '</ul>';
-            certDiv.innerHTML = certHtml;
-
-            // NEW: Badges Section
-            const badgesDiv = document.createElement('div');
-            badgesDiv.className = 'bg-white p-8 rounded-lg border border-gray-200 shadow-md md:col-span-2';
-            let badgesHtml = '<h3 class="text-2xl font-bold mb-6 text-gray-900">Badges</h3><div class="flex flex-wrap items-center justify-center gap-6">';
-            
-            resumeData.badges.forEach(badge => {
-                if (badge.type === "link" && badge.linkUrl) {
-                    badgesHtml += `
-                        <a href="${badge.linkUrl}" target="_blank" rel="noopener noreferrer" class="hover:scale-105 transition-transform duration-200">
-                            <img src="${badge.imageUrl}" alt="${badge.name}" class="h-24 w-auto object-contain">
-                        </a>
-                    `;
-                } else if (badge.type === "modal") {
-                    badgesHtml += `
-                        <img src="${badge.imageUrl}" alt="${badge.name}" 
-                             class="h-24 w-auto object-contain cursor-pointer hover:scale-105 transition-transform duration-200 pmi-badge-thumbnail">
-                    `;
-                } else {
-                    // Default rendering for other badges if needed
-                    badgesHtml += `
-                        <img src="${badge.imageUrl}" alt="${badge.name}" class="h-24 w-auto object-contain hover:scale-105 transition-transform duration-200">
-                    `;
-                }
-            });
-
-            badgesHtml += '</div>';
-            badgesDiv.innerHTML = badgesHtml;
-
-
-            eduContainer.appendChild(eduDiv);
-            eduContainer.appendChild(certDiv);
-            eduContainer.appendChild(badgesDiv);
-        }
+        // --- JavaScript for dynamic content rendering ---
 
         document.addEventListener('DOMContentLoaded', () => {
-            populateCompetencies();
-            populateTimeline();
-            populateSkills();
-            populateEducation();
+            document.getElementById('name').textContent = resumeData.name;
+            document.getElementById('tagline').textContent = resumeData.tagline;
+            document.getElementById('about-text').textContent = resumeData.about;
+            document.getElementById('current-year').textContent = new Date().getFullYear();
 
-            // Smooth scrolling for navigation links
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
+            // Render Experience
+            const experienceList = document.getElementById('experience-list');
+            resumeData.experience.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'timeline-item';
+                div.innerHTML = `
+                    <div class="timeline-item-icon">${item.icon}</div>
+                    <div class="timeline-item-content">
+                        <h3>${item.title} at ${item.company}</h3>
+                        <p>${item.duration}</p>
+                        <p>${item.description}</p>
+                    </div>
+                `;
+                experienceList.appendChild(div);
+            });
+
+            // Render Education
+            const educationList = document.getElementById('education-list');
+            resumeData.education.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'timeline-item';
+                div.innerHTML = `
+                    <div class="timeline-item-icon">${item.icon}</div>
+                    <div class="timeline-item-content">
+                        <h3>${item.title} from ${item.institution}</h3>
+                        <p>${item.duration}</p>
+                        <p>${item.description}</p>
+                    </div>
+                `;
+                educationList.appendChild(div);
+            });
+
+            // Render Skills
+            const skillsList = document.getElementById('skills-list');
+            resumeData.skills.forEach(skillCat => {
+                const categoryDiv = document.createElement('div');
+                categoryDiv.innerHTML = `<h3 class="text-xl font-medium mt-4 mb-2">${skillCat.category}</h3>`;
+                const ul = document.createElement('ul');
+                ul.className = 'list-disc list-inside ml-4';
+                skillCat.items.forEach(skill => {
+                    const li = document.createElement('li');
+                    li.textContent = skill;
+                    ul.appendChild(li);
+                });
+                categoryDiv.appendChild(ul);
+                skillsList.appendChild(categoryDiv);
+            });
+
+            // Render Awards
+            const awardsList = document.getElementById('awards-list');
+            resumeData.awards.forEach(item => {
+                const div = document.createElement('div');
+                div.className = 'timeline-item';
+                div.innerHTML = `
+                    <div class="timeline-item-icon">${item.icon}</div>
+                    <div class="timeline-item-content">
+                        <h3>${item.title} from ${item.organization}</h3>
+                        <p>${item.year}</p>
+                        <p>${item.description}</p>
+                    </div>
+                `;
+                awardsList.appendChild(div);
+            });
+
+
+            // Render Badges and Modal Logic
+            const badgesGrid = document.getElementById('badges-grid');
+            const badgeModal = document.getElementById('badgeModal');
+            const modalBadgeImage = document.getElementById('modalBadgeImage');
+            const modalBadgeName = document.getElementById('modalBadgeName');
+            const closeButton = document.querySelector('.close-button');
+
+            resumeData.badges.forEach(badge => {
+                const div = document.createElement('div');
+                div.className = 'badge-item';
+                div.innerHTML = `
+                    <img src="${badge.imageUrl}" alt="${badge.name}">
+                    <span>${badge.name}</span>
+                `;
+
+                if (badge.type === 'modal') {
+                    div.addEventListener('click', () => {
+                        modalBadgeImage.src = badge.imageUrl;
+                        modalBadgeImage.alt = badge.name;
+                        modalBadgeName.textContent = badge.name;
+                        badgeModal.style.display = 'flex'; // Use flex to center
                     });
-                });
+                } else if (badge.type === 'link' && badge.linkUrl) {
+                    div.addEventListener('click', () => {
+                        window.open(badge.linkUrl, '_blank');
+                    });
+                }
+                badgesGrid.appendChild(div);
             });
 
-            // Adjust timeline item content max-height on window resize for responsiveness
-            window.addEventListener('resize', () => {
-                document.querySelectorAll('.timeline-item-content.expanded').forEach(content => {
-                    content.style.maxHeight = content.scrollHeight + 30 + 'px';
-                });
+            // Close the modal when the close button is clicked
+            closeButton.addEventListener('click', () => {
+                badgeModal.style.display = 'none';
             });
 
-            // --- Modal Logic for PMI Badge ---
-            const imageModal = document.getElementById('imageModal');
-            const modalImage = document.getElementById('modalImage');
-
-            document.addEventListener('click', (event) => {
-                if (event.target.classList.contains('pmi-badge-thumbnail')) {
-                    modalImage.src = event.target.src;
-                    imageModal.classList.add('visible');
-                } else if (event.target === imageModal) {
-                    // Close modal if clicked outside the image content
-                    imageModal.classList.remove('visible');
-                    modalImage.src = ''; // Clear image to save memory
+            // Close the modal when clicking outside the content
+            window.addEventListener('click', (event) => {
+                if (event.target == badgeModal) {
+                    badgeModal.style.display = 'none';
                 }
             });
 
-            // Close modal with Escape key
-            document.addEventListener('keydown', (event) => {
-                if (event.key === 'Escape' && imageModal.classList.contains('visible')) {
-                    imageModal.classList.remove('visible');
-                    modalImage.src = '';
-                }
-            });
-            // --- End Modal Logic ---
+
+            // Render Contact Info
+            const contactInfo = document.getElementById('contact-info');
+            if (resumeData.contact.email) {
+                const div = document.createElement('div');
+                div.innerHTML = `<strong>Email:</strong> <a href="mailto:${resumeData.contact.email}">${resumeData.contact.email}</a>`;
+                contactInfo.appendChild(div);
+            }
+            if (resumeData.contact.phone) {
+                const div = document.createElement('div');
+                div.innerHTML = `<strong>Phone:</strong> ${resumeData.contact.phone}`;
+                contactInfo.appendChild(div);
+            }
+            if (resumeData.contact.linkedin) {
+                const div = document.createElement('div');
+                div.innerHTML = `<strong>LinkedIn:</strong> <a href="https://${resumeData.contact.linkedin}" target="_blank">${resumeData.contact.linkedin}</a>`;
+                contactInfo.appendChild(div);
+            }
+            if (resumeData.contact.github) {
+                const div = document.createElement('div');
+                div.innerHTML = `<strong>GitHub:</strong> <a href="https://${resumeData.contact.github}" target="_blank">${resumeData.contact.github}</a>`;
+                contactInfo.appendChild(div);
+            }
+            if (resumeData.contact.location) {
+                const div = document.createElement('div');
+                div.innerHTML = `<strong>Location:</strong> ${resumeData.contact.location}`;
+                contactInfo.appendChild(div);
+            }
         });
     </script>
 </body>
