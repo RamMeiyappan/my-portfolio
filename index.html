@@ -41,7 +41,7 @@
             transition: transform 0.2s ease-in-out;
         }
         .timeline-icon:hover {
-            transform: scale(1.1);
+                transform: scale(1.1);
         }
         .timeline-line {
             background-color: #A0D8D8; /* Lighter, more noticeable line */
@@ -72,6 +72,34 @@
             }
         }
 
+        /* Styles for the image modal/overlay */
+        .image-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+        }
+        .image-modal-overlay.visible {
+            visibility: visible;
+            opacity: 1;
+        }
+        .image-modal-content {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+        }
+
         /* --- Print Specific Styles --- */
         @media print {
             body {
@@ -80,7 +108,7 @@
                 -webkit-print-color-adjust: exact; /* For background colors to print */
                 print-color-adjust: exact;
             }
-            header, footer, .print-button, .download-button { /* Hide both buttons */
+            header, footer, .print-button, .download-button, .image-modal-overlay { /* Hide both buttons and modal */
                 display: none !important; 
             }
             main {
@@ -235,8 +263,11 @@
     </main>
     
     <footer class="text-center py-8 mt-20 border-t border-gray-200 bg-gray-50 text-gray-600">
-        <p class="max-w-xl mx-auto">&copy; 2024 Meiyappan Rm. Crafted with a blend of professional experience and modern web technologies for a truly interactive presentation.</p>
-    </footer>
+        </footer>
+
+    <div id="imageModal" class="image-modal-overlay">
+        <img id="modalImage" class="image-modal-content" src="" alt="Enlarged Image">
+    </div>
 
     <script>
         const resumeData = {
@@ -339,6 +370,19 @@
                 "Agile Scrum Master",
                 "Certified Associate in Project Management (CAPM)",
                 "ITIL® Foundation Certification"
+            ],
+            badges: [
+                { 
+                    name: "CSPO Badge", 
+                    imageUrl: "https://bcert.me/bc/html/img/badges/generated/badge-7224.png", 
+                    linkUrl: "https://bcert.me/bc/html/show-badge.html?b=gcgdpdgm",
+                    type: "link" // New type property
+                },
+                { 
+                    name: "PMI Member Badge", 
+                    imageUrl: "pmimember.jpg", // ENSURE THIS FILE IS IN THE SAME DIRECTORY OR PROVIDE FULL URL
+                    type: "modal" // New type property
+                }
             ]
         };
 
@@ -395,7 +439,7 @@
 
                 const icon = document.createElement('div');
                 icon.className = `timeline-icon flex items-center justify-center w-10 h-10 bg-teal-600 rounded-full text-white flex-shrink-0`;
-                icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 0 00-2 2v10a2 0 002 2h12a2 0 002-2V6a2 0 00-2-2h-1V3a1 0 10-2 0v1H7V3a1 0 00-1-1zm0 5a1 0 000 2h8a1 0 100-2H6z" clip-rule="evenodd" /></svg>`;
+                icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 0 00-2 2v10a2 0 002 2h12a2 0 002-2V6a2 0 00-2-2h-1V3a1 0 10-2 0v1H7V3a1 0 00-1-1zm0 5a1 1 0 000 2h8a1 0 100-2H6z" clip-rule="evenodd" /></svg>`;
 
                 iconWrapper.appendChild(icon);
 
@@ -494,10 +538,41 @@
             resumeData.certifications.forEach(cert => {
                 certHtml += `<li>${cert}</li>`;
             });
-            certDiv.innerHTML = certHtml + '</ul>';
+            certHtml += '</ul>';
+            certDiv.innerHTML = certHtml;
+
+            // NEW: Badges Section
+            const badgesDiv = document.createElement('div');
+            badgesDiv.className = 'bg-white p-8 rounded-lg border border-gray-200 shadow-md md:col-span-2';
+            let badgesHtml = '<h3 class="text-2xl font-bold mb-6 text-gray-900">Badges</h3><div class="flex flex-wrap items-center justify-center gap-6">';
+            
+            resumeData.badges.forEach(badge => {
+                if (badge.type === "link" && badge.linkUrl) {
+                    badgesHtml += `
+                        <a href="${badge.linkUrl}" target="_blank" rel="noopener noreferrer" class="hover:scale-105 transition-transform duration-200">
+                            <img src="${badge.imageUrl}" alt="${badge.name}" class="h-24 w-auto object-contain">
+                        </a>
+                    `;
+                } else if (badge.type === "modal") {
+                    badgesHtml += `
+                        <img src="${badge.imageUrl}" alt="${badge.name}" 
+                             class="h-24 w-auto object-contain cursor-pointer hover:scale-105 transition-transform duration-200 pmi-badge-thumbnail">
+                    `;
+                } else {
+                    // Default rendering for other badges if needed
+                    badgesHtml += `
+                        <img src="${badge.imageUrl}" alt="${badge.name}" class="h-24 w-auto object-contain hover:scale-105 transition-transform duration-200">
+                    `;
+                }
+            });
+
+            badgesHtml += '</div>';
+            badgesDiv.innerHTML = badgesHtml;
+
 
             eduContainer.appendChild(eduDiv);
             eduContainer.appendChild(certDiv);
+            eduContainer.appendChild(badgesDiv);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -522,6 +597,30 @@
                     content.style.maxHeight = content.scrollHeight + 30 + 'px';
                 });
             });
+
+            // --- Modal Logic for PMI Badge ---
+            const imageModal = document.getElementById('imageModal');
+            const modalImage = document.getElementById('modalImage');
+
+            document.addEventListener('click', (event) => {
+                if (event.target.classList.contains('pmi-badge-thumbnail')) {
+                    modalImage.src = event.target.src;
+                    imageModal.classList.add('visible');
+                } else if (event.target === imageModal) {
+                    // Close modal if clicked outside the image content
+                    imageModal.classList.remove('visible');
+                    modalImage.src = ''; // Clear image to save memory
+                }
+            });
+
+            // Close modal with Escape key
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && imageModal.classList.contains('visible')) {
+                    imageModal.classList.remove('visible');
+                    modalImage.src = '';
+                }
+            });
+            // --- End Modal Logic ---
         });
     </script>
 </body>
