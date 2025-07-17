@@ -166,7 +166,7 @@
                     Print / Save as PDF
                 </button>
             </div>
-            </nav>
+        </nav>
     </header>
 
     <main class="container mx-auto px-6 py-16">
@@ -243,7 +243,7 @@
             competencies: [
                 "Project Lifecycle Management", "SaaS Implementation", "Stakeholder Engagement",
                 "Agile & Waterfall Delivery", "Team Leadership", "Risk & Issue Management",
-                "Client Onboarding", "KPI Tracking", "T & QA", "Process Optimization",
+                "Client Onboarding", "KPI Tracking", "UAT & QA", "Process Optimization",
                 "CRM Platforms", "Cross-Functional Collaboration", "Change Management",
                 "Vendor Management", "Budgeting & Forecasting", "Post-Go-Live Support"
             ],
@@ -357,16 +357,16 @@
             resumeData.experience.forEach((job, index) => {
                 const isLeft = index % 2 === 0;
                 const timelineItem = document.createElement('div');
-                timelineItem.className = `timeline-item mb-12 flex items-center ${isLeft ? 'justify-start flex-row-reverse' : 'justify-start'}`; // Adjusted for cleaner layout
+                timelineItem.className = `timeline-item mb-12 flex items-center ${isLeft ? 'justify-start flex-row-reverse' : 'justify-start'}`;
 
                 const contentWrapper = document.createElement('div');
-                contentWrapper.className = `w-1/2 ${isLeft ? 'pr-10 text-right' : 'pl-10 text-left'}`; // More spacing and text alignment
+                contentWrapper.className = `w-1/2 ${isLeft ? 'pr-10 text-right' : 'pl-10 text-left'}`;
 
                 const itemBox = document.createElement('div');
-                itemBox.className = 'bg-white border border-gray-200 rounded-lg shadow-xl cursor-pointer hover:shadow-2xl transition-shadow duration-300'; // Stronger shadow, hover effect
+                itemBox.className = 'bg-white border border-gray-200 rounded-lg shadow-xl cursor-pointer hover:shadow-2xl transition-shadow duration-300';
 
                 const header = document.createElement('div');
-                header.className = 'p-6 pb-2 rounded-t-lg'; // More padding
+                header.className = 'p-6 pb-2 rounded-t-lg';
                 header.innerHTML = `
                     <p class="font-bold text-xl text-gray-900 mb-1">${job.role}</p>
                     <p class="text-teal-700 font-semibold text-lg mb-1">${job.company}</p>
@@ -374,18 +374,16 @@
                 `;
 
                 const content = document.createElement('div');
-                content.className = 'timeline-item-content bg-gray-50/70 rounded-b-lg border-t border-gray-100'; // Slightly darker background, border
+                content.className = 'timeline-item-content bg-gray-50/70 rounded-b-lg border-t border-gray-100';
                 content.innerHTML = `<ul class="list-disc list-inside space-y-2 text-gray-700 text-base leading-relaxed">${job.details.map(d => `<li>${d}</li>`).join('')}</ul>`;
 
                 itemBox.appendChild(header);
                 itemBox.appendChild(content);
                 itemBox.onclick = (e) => {
-                    // Prevent propagation if clicking on a link inside the box
                     if (e.target.tagName === 'A') return; 
                     content.classList.toggle('expanded');
-                    // Adjust max-height dynamically if needed based on actual content height
                     if (content.classList.contains('expanded')) {
-                        content.style.maxHeight = content.scrollHeight + 30 + 'px'; // Add some buffer
+                        content.style.maxHeight = content.scrollHeight + 30 + 'px';
                     } else {
                         content.style.maxHeight = '0';
                     }
@@ -393,21 +391,20 @@
                 contentWrapper.appendChild(itemBox);
 
                 const iconWrapper = document.createElement('div');
-                iconWrapper.className = `absolute left-1/2 transform -translate-x-1/2 z-10`; // Centralize icon
+                iconWrapper.className = `absolute left-1/2 transform -translate-x-1/2 z-10`;
 
                 const icon = document.createElement('div');
-                icon.className = `timeline-icon flex items-center justify-center w-10 h-10 bg-teal-600 rounded-full text-white flex-shrink-0`; // Larger icon, stronger color
+                icon.className = `timeline-icon flex items-center justify-center w-10 h-10 bg-teal-600 rounded-full text-white flex-shrink-0`;
                 icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 0 00-2 2v10a2 0 002 2h12a2 0 002-2V6a2 0 00-2-2h-1V3a1 0 10-2 0v1H7V3a1 0 00-1-1zm0 5a1 0 000 2h8a1 0 100-2H6z" clip-rule="evenodd" /></svg>`;
 
                 iconWrapper.appendChild(icon);
 
-                // Reorder children based on isLeft for visual timeline effect
                 if (isLeft) {
-                    timelineItem.appendChild(iconWrapper); // icon in middle
-                    timelineItem.appendChild(contentWrapper); // content on right
+                    timelineItem.appendChild(iconWrapper);
+                    timelineItem.appendChild(contentWrapper);
                 } else {
-                    timelineItem.appendChild(contentWrapper); // content on left
-                    timelineItem.appendChild(iconWrapper); // icon in middle
+                    timelineItem.appendChild(contentWrapper);
+                    timelineItem.appendChild(iconWrapper);
                 }
                 
                 timeline.appendChild(timelineItem);
@@ -423,26 +420,26 @@
                     datasets: [{
                         label: 'Proficiency',
                         data: resumeData.skills.chartData.data,
-                        backgroundColor: 'rgba(0, 128, 128, 0.3)', /* Darker teal for fill */
-                        borderColor: 'rgba(0, 128, 128, 1)', /* Stronger teal border */
+                        backgroundColor: 'rgba(0, 128, 128, 0.3)',
+                        borderColor: 'rgba(0, 128, 128, 1)',
                         pointBackgroundColor: 'rgba(0, 128, 128, 1)',
                         pointBorderColor: '#fff',
                         pointHoverBackgroundColor: '#fff',
                         pointHoverBorderColor: 'rgba(0, 128, 128, 1)',
-                        borderWidth: 2 /* Thicker border for clarity */
+                        borderWidth: 2
                     }]
                 },
                 options: {
                     maintainAspectRatio: false,
                     scales: {
                         r: {
-                            angleLines: { color: 'rgba(0, 0, 0, 0.15)' }, /* Slightly darker angle lines */
-                            grid: { color: 'rgba(0, 0, 0, 0.15)' }, /* Slightly darker grid lines */
-                            pointLabels: { font: { size: 13, weight: 'bold' }, color: '#4A5568' }, /* Larger, bolder labels */
+                            angleLines: { color: 'rgba(0, 0, 0, 0.15)' },
+                            grid: { color: 'rgba(0, 0, 0, 0.15)' },
+                            pointLabels: { font: { size: 13, weight: 'bold' }, color: '#4A5568' },
                             ticks: {
                                 backdropColor: 'transparent',
                                 stepSize: 20,
-                                color: '#4A5568' /* Color for tick labels */
+                                color: '#4A5568'
                             },
                             suggestedMin: 0,
                             suggestedMax: 100
