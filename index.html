@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,43 +7,55 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
-    <!-- Chosen Palette: Warm Neutral Harmony -->
-    <!-- Application Structure Plan: A single-page, top-down narrative structure designed for recruiters. The flow starts with a high-level summary, moves to an interactive career timeline allowing drill-down into specific roles without overwhelming the user, and culminates in a visual showcase of skills and qualifications. This structure was chosen to guide the user from a broad overview to specific details in an intuitive, engaging manner, making key information easily accessible via scrolling or a sticky navigation bar. -->
-    <!-- Visualization & Content Choices: 
-        - Report Info: Professional Experience -> Goal: Show career progression -> Viz/Presentation: Interactive Vertical Timeline (HTML/CSS/JS) -> Interaction: Click to expand/collapse role details -> Justification: Organizes extensive experience cleanly, prevents a wall of text, and encourages exploration.
-        - Report Info: Core Competencies -> Goal: Highlight key skills -> Viz/Presentation: Styled 'Tags' or 'Pills' -> Interaction: Hover highlight -> Justification: Modern, scannable, and visually separates skills from prose.
-        - Report Info: Technical Skills -> Goal: Showcase proficiency areas -> Viz/Presentation: Radar Chart (Chart.js) for high-level competencies & styled lists for specific tools -> Interaction: Hover on chart points for details -> Justification: Radar chart offers a high-impact visual summary of strengths, superior to a simple list for quick evaluation.
-        - Report Info: Quantified Achievements (e.g., "30+ projects") -> Goal: Emphasize impact -> Viz/Presentation: Styled metric callouts within timeline cards -> Interaction: None -> Justification: Draws immediate attention to tangible results and data-driven success.
-    -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #FDFDFD;
-            color: #1a202c;
+            background-color: #F8F8F8; /* Softer, slightly off-white background */
+            color: #2D3748; /* Darker text for better contrast */
+        }
+        .header-bg {
+            background-color: #ffffff; /* White background for header */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); /* More visible shadow */
+        }
+        .nav-link {
+            transition: color 0.3s ease-in-out;
+            color: #4A5568; /* Default text color for links */
+        }
+        .nav-link:hover {
+            color: #008080; /* Darker teal on hover */
         }
         .timeline-item-content {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.5s ease-in-out, padding 0.5s ease-in-out;
-            padding: 0 1rem;
+            transition: max-height 0.6s ease-in-out, padding 0.6s ease-in-out;
+            padding: 0 1.5rem; /* Slightly more padding */
         }
         .timeline-item-content.expanded {
-            max-height: 500px; /* Adjust as needed */
-            padding: 1.5rem 1rem;
+            max-height: 600px; /* Increased max-height for content */
+            padding: 1.5rem;
         }
-        .nav-link {
-            transition: color 0.3s;
+        .timeline-icon {
+            background-color: #008080; /* Stronger teal for timeline icons */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: transform 0.2s ease-in-out;
         }
-        .nav-link:hover {
-            color: #38b2ac;
+        .timeline-icon:hover {
+            transform: scale(1.1);
+        }
+        .timeline-line {
+            background-color: #A0D8D8; /* Lighter, more noticeable line */
         }
         .tag {
             transition: all 0.2s ease-in-out;
+            background-color: #E6FFFA; /* Lighter teal background */
+            color: #2C7A7B; /* Darker teal text */
+            font-weight: 500;
         }
         .tag:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transform: translateY(-3px); /* More pronounced lift */
+            box-shadow: 0 6px 10px -1px rgba(0, 0, 0, 0.1), 0 3px 6px -1px rgba(0, 0, 0, 0.08); /* Stronger shadow */
+            background-color: #B2F5EA; /* Slightly darker on hover */
         }
         .chart-container {
             position: relative; 
@@ -58,73 +71,171 @@
                 height: 400px; 
             }
         }
+
+        /* --- Print Specific Styles --- */
+        @media print {
+            body {
+                background-color: #ffffff;
+                color: #000000;
+                -webkit-print-color-adjust: exact; /* For background colors to print */
+                print-color-adjust: exact;
+            }
+            header, footer, .print-button, .download-button { /* Hide both buttons */
+                display: none !important; 
+            }
+            main {
+                margin: 0;
+                padding: 0;
+                max-width: none;
+                width: 100%;
+            }
+            section {
+                margin-bottom: 1rem !important; /* Reduce space between sections for print */
+                page-break-inside: avoid; /* Avoid breaking sections across pages */
+            }
+            h1, h2, h3, h4 {
+                color: #000000 !important; /* Ensure headings are black */
+            }
+            .timeline-item-content {
+                max-height: none !important; /* Expand all timeline content */
+                overflow: visible !important;
+                padding: 0.5rem 1rem !important;
+            }
+            .timeline-item {
+                margin-bottom: 0.5rem !important; /* Reduce gap between timeline items */
+            }
+            .timeline-line, .timeline-icon {
+                display: none !important; /* Hide the interactive timeline elements for print */
+            }
+            .timeline-item > div { /* Adjust width of content for non-interactive print layout */
+                width: 100% !important;
+                padding-left: 0 !important;
+                padding-right: 0 !important;
+            }
+            .bg-white, .bg-gray-50\/50, .border, .shadow-md, .shadow-sm {
+                background-color: #ffffff !important; /* Ensure elements are white on print */
+                box-shadow: none !important; /* Remove shadows */
+                border: none !important; /* Remove borders for cleaner look */
+            }
+            .tag {
+                background-color: #E6FFFA !important; /* Keep a hint of color for tags if desired */
+                color: #2C7A7B !important; 
+                border: 1px solid #B2F5EA !important;
+                box-shadow: none !important;
+            }
+            ul.list-disc {
+                list-style-type: disc !important;
+                margin-left: 1.5rem !important;
+            }
+            ul.list-inside {
+                list-style-position: inside !important;
+            }
+            strong {
+                color: #000000 !important; /* Ensure bold text is black */
+            }
+            a {
+                color: #0000EE !important; /* Default link blue */
+                text-decoration: underline !important;
+            }
+            /* Specific adjustments for skills list to ensure it's readable */
+            #tech-skills-list .md\:col-span-2 {
+                grid-column: span 5 / span 5 !important; /* Make skills list span full width for print */
+                margin-top: 1rem;
+            }
+            #skillsChart {
+                display: none !important; /* Hide the chart for print */
+            }
+        }
     </style>
 </head>
 <body class="antialiased">
 
-    <header id="home" class="sticky top-0 bg-white/80 backdrop-blur-sm z-10 shadow-sm">
+    <header id="home" class="sticky top-0 header-bg backdrop-blur-sm z-10">
         <nav class="container mx-auto px-6 py-3 flex justify-between items-center">
-            <a href="#home" class="text-xl font-bold text-gray-800">Meiyappan Rm</a>
-            <div class="hidden md:flex space-x-6">
-                <a href="#experience" class="nav-link text-gray-600">Experience</a>
-                <a href="#skills" class="nav-link text-gray-600">Skills</a>
-                <a href="#education" class="nav-link text-gray-600">Education</a>
+            <a href="#home" class="text-2xl font-bold text-gray-900">Meiyappan Rm</a>
+            <div class="hidden md:flex space-x-8 items-center">
+                <a href="#experience" class="nav-link text-lg">Experience</a>
+                <a href="#skills" class="nav-link text-lg">Skills</a>
+                <a href="#education" class="nav-link text-lg">Education</a>
+                
+                <a href="path/to/your/Meiyappan_Rm_Resume.pdf" download="Meiyappan_Rm_Resume.pdf" class="download-button bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-full shadow-lg transition duration-300 ease-in-out">
+                    Download CV (PDF)
+                </a>
+
+                <button onclick="window.print()" class="print-button bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-5 rounded-full shadow-lg transition duration-300 ease-in-out">
+                    Print / Save as PDF
+                </button>
             </div>
-        </nav>
+            </nav>
     </header>
 
-    <main class="container mx-auto px-6 py-12">
-        <section class="text-center mb-16">
-            <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Project Manager & Implementation Leader</h1>
-            <p class="max-w-3xl mx-auto text-gray-600 mb-6">
-                Results-driven Project Manager and Senior Implementation Leader with 15+ years of experience leading SaaS-based implementations, ERP and LMS rollouts, and stakeholder engagement across global markets. Skilled in end-to-end project execution, cross-functional collaboration, risk mitigation, and post-go-live support. Certified Scrum Product Owner (CSPO) with a consistent track record of delivering complex projects on time, within scope, and exceeding expectations.
+    <main class="container mx-auto px-6 py-16">
+        <section class="text-center mb-20">
+            <h1 class="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">Project Manager & Implementation Leader</h1>
+            <p class="max-w-4xl mx-auto text-gray-700 text-lg mb-8 leading-relaxed">
+                A highly effective **Project Manager and Senior Implementation Leader** with over **15 years of impactful experience**. I specialize in spearheading **SaaS-based implementations, ERP, and LMS rollouts** across diverse global markets. My expertise lies in end-to-end project execution, fostering robust cross-functional collaboration, proactive risk mitigation, and ensuring seamless post-go-live support. As a **Certified Scrum Product Owner (CSPO)**, I consistently deliver complex projects on time, within scope, and exceeding stakeholder expectations.
             </p>
-             <div class="flex justify-center items-center space-x-4 text-sm text-gray-500">
+            <div class="flex justify-center items-center space-x-6 text-base text-gray-600 font-medium">
                 <span>📞 +91 9487413140</span>
-                <span class="text-gray-300">|</span>
+                <span class="text-gray-400">|</span>
                 <span>📧 mena@aol.in</span>
-                <span class="text-gray-300">|</span>
-                <a href="https://linkedin.com/in/ramamena" target="_blank" class="nav-link">🔗 LinkedIn</a>
+                <span class="text-gray-400">|</span>
+                <a href="https://linkedin.com/in/ramamena" target="_blank" class="nav-link flex items-center">
+                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.02h-2.5v16.48h2.5v-16.48zm7.98 0h-2.5v16.48h2.5v-8.79c0-4.09 3.06-4.48 3.73-1.61v10.4h2.5v-10.7c0-5.84-3.56-6.47-5.46-2.58z"></path></svg>
+                    LinkedIn
+                </a>
             </div>
         </section>
+
+        <hr class="border-t border-gray-300 my-16">
 
         <section class="mb-20">
-            <h2 class="text-3xl font-bold text-center mb-8">Core Competencies</h2>
-            <div id="competencies" class="flex flex-wrap justify-center gap-3">
-            </div>
+            <h2 class="text-4xl font-bold text-center mb-10 text-gray-900">Core Competencies</h2>
+            <div id="competencies" class="flex flex-wrap justify-center gap-4">
+                </div>
         </section>
         
+        <hr class="border-t border-gray-300 my-16">
+
         <section id="experience" class="mb-20">
-            <h2 class="text-3xl font-bold text-center mb-12">Professional Experience</h2>
-            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">A journey of growth and impact. My career has been focused on delivering complex technical solutions and driving operational excellence. Click on any role to see the key achievements and responsibilities.</p>
-            <div id="timeline" class="relative max-w-3xl mx-auto">
-                 <div class="absolute left-1/2 h-full w-0.5 bg-gray-200 transform -translate-x-1/2"></div>
-            </div>
+            <h2 class="text-4xl font-bold text-center mb-14 text-gray-900">Professional Experience</h2>
+            <p class="text-center text-gray-700 text-lg mb-14 max-w-3xl mx-auto">
+                A journey of growth and impact. My career has been focused on delivering complex technical solutions and driving operational excellence. Click on any role to see the key achievements and responsibilities.
+            </p>
+            <div id="timeline" class="relative max-w-4xl mx-auto">
+                <div class="absolute left-1/2 h-full w-1 bg-teal-300 transform -translate-x-1/2 timeline-line"></div>
+                </div>
         </section>
 
+        <hr class="border-t border-gray-300 my-16">
+
         <section id="skills" class="mb-20">
-            <h2 class="text-3xl font-bold text-center mb-12">Technical Skills & Proficiencies</h2>
-            <p class="text-center text-gray-600 mb-12 max-w-2xl mx-auto">A versatile skill set for modern project challenges. The chart below highlights core strengths, followed by a detailed list of the technical tools I command.</p>
-            <div class="grid md:grid-cols-5 gap-12 items-center">
+            <h2 class="text-4xl font-bold text-center mb-14 text-gray-900">Technical Skills & Proficiencies</h2>
+            <p class="text-center text-gray-700 text-lg mb-14 max-w-3xl mx-auto">
+                A versatile skill set for modern project challenges. The chart below highlights core strengths, followed by a detailed list of the technical tools I command.
+            </p>
+            <div class="grid md:grid-cols-5 gap-16 items-center">
                 <div class="md:col-span-3">
-                     <div class="chart-container">
+                    <div class="chart-container shadow-lg rounded-lg p-4 bg-white">
                         <canvas id="skillsChart"></canvas>
                     </div>
                 </div>
-                <div id="tech-skills-list" class="md:col-span-2 space-y-6">
-                </div>
+                <div id="tech-skills-list" class="md:col-span-2 space-y-8 bg-white p-6 rounded-lg shadow-md border border-gray-100">
+                    </div>
             </div>
         </section>
 
+        <hr class="border-t border-gray-300 my-16">
+
         <section id="education">
-            <h2 class="text-3xl font-bold text-center mb-12">Education & Certifications</h2>
-            <div id="education-list" class="max-w-4xl mx-auto grid md:grid-cols-2 gap-8">
-            </div>
+            <h2 class="text-4xl font-bold text-center mb-14 text-gray-900">Education & Certifications</h2>
+            <div id="education-list" class="max-w-5xl mx-auto grid md:grid-cols-2 gap-10">
+                </div>
         </section>
     </main>
     
-    <footer class="text-center py-6 mt-16 border-t border-gray-200">
-        <p class="text-gray-500">&copy; 2025 Meiyappan Rm.</p>
+    <footer class="text-center py-8 mt-20 border-t border-gray-200 bg-gray-50 text-gray-600">
+        <p class="max-w-xl mx-auto">&copy; 2024 Meiyappan Rm. Crafted with a blend of professional experience and modern web technologies for a truly interactive presentation.</p>
     </footer>
 
     <script>
@@ -133,7 +244,8 @@
                 "Project Lifecycle Management", "SaaS Implementation", "Stakeholder Engagement",
                 "Agile & Waterfall Delivery", "Team Leadership", "Risk & Issue Management",
                 "Client Onboarding", "KPI Tracking", "UAT & QA", "Process Optimization",
-                "CRM Platforms", "Cross-Functional Collaboration", "Change Management"
+                "CRM Platforms", "Cross-Functional Collaboration", "Change Management",
+                "Vendor Management", "Budgeting & Forecasting", "Post-Go-Live Support"
             ],
             experience: [
                 {
@@ -199,12 +311,12 @@
                     data: [95, 90, 95, 85, 90, 80],
                 },
                 tech: [
-                    { category: 'Project Tools', items: 'Jira, MS Project, Confluence, Trello, ClickUp' },
-                    { category: 'CRM', items: 'Salesforce, HubSpot, Zoho, Zendesk, Intercom' },
-                    { category: 'Cloud & BI', items: 'Microsoft Azure, AWS (basic), Power BI' },
-                    { category: 'Automation & APIs', items: 'Postman, Zapier, UAT, BRD/PRD' },
-                    { category: 'Web & Data', items: 'HTML, CSS, MongoDB, MySQL' },
-                    { category: 'E-commerce', items: 'Amazon, Shopify, Walmart, ChannelAdvisor' }
+                    { category: 'Project Tools', items: 'Jira, MS Project, Confluence, Trello, ClickUp, Asana' },
+                    { category: 'CRM', items: 'Salesforce, HubSpot, Zoho, Zendesk, Intercom, Freshdesk' },
+                    { category: 'Cloud & BI', items: 'Microsoft Azure, AWS (basic), Power BI, Tableau (basic)' },
+                    { category: 'Automation & APIs', items: 'Postman, Zapier, UAT, BRD/PRD, Flowcharting' },
+                    { category: 'Web & Data', items: 'HTML, CSS, MongoDB, MySQL, SQL' },
+                    { category: 'E-commerce', items: 'Amazon, Shopify, Walmart, ChannelAdvisor, Magento' }
                 ]
             },
             education: [
@@ -225,7 +337,8 @@
                 "Agile with Atlassian Jira",
                 "Azure Essentials",
                 "Agile Scrum Master",
-                "Certified Associate in Project Management (CAPM)"
+                "Certified Associate in Project Management (CAPM)",
+                "ITIL® Foundation Certification"
             ]
         };
 
@@ -244,49 +357,57 @@
             resumeData.experience.forEach((job, index) => {
                 const isLeft = index % 2 === 0;
                 const timelineItem = document.createElement('div');
-                timelineItem.className = `timeline-item mb-8 flex ${isLeft ? 'justify-start' : 'justify-end'}`;
-                
+                timelineItem.className = `timeline-item mb-12 flex items-center ${isLeft ? 'justify-start flex-row-reverse' : 'justify-start'}`; // Adjusted for cleaner layout
+
                 const contentWrapper = document.createElement('div');
-                contentWrapper.className = `w-1/2 ${isLeft ? 'pr-8' : 'pl-8'}`;
-                
+                contentWrapper.className = `w-1/2 ${isLeft ? 'pr-10 text-right' : 'pl-10 text-left'}`; // More spacing and text alignment
+
                 const itemBox = document.createElement('div');
-                itemBox.className = 'bg-white border border-gray-200 rounded-lg shadow-md cursor-pointer';
+                itemBox.className = 'bg-white border border-gray-200 rounded-lg shadow-xl cursor-pointer hover:shadow-2xl transition-shadow duration-300'; // Stronger shadow, hover effect
 
                 const header = document.createElement('div');
-                header.className = 'p-4 rounded-t-lg';
+                header.className = 'p-6 pb-2 rounded-t-lg'; // More padding
                 header.innerHTML = `
-                    <p class="font-bold text-lg text-gray-900">${job.role}</p>
-                    <p class="text-teal-600 font-semibold">${job.company}</p>
+                    <p class="font-bold text-xl text-gray-900 mb-1">${job.role}</p>
+                    <p class="text-teal-700 font-semibold text-lg mb-1">${job.company}</p>
                     <p class="text-sm text-gray-500">${job.period}</p>
                 `;
-                
+
                 const content = document.createElement('div');
-                content.className = 'timeline-item-content bg-gray-50/50 rounded-b-lg';
-                content.innerHTML = `<ul class="list-disc list-inside space-y-2 text-gray-700">${job.details.map(d => `<li>${d}</li>`).join('')}</ul>`;
-                
+                content.className = 'timeline-item-content bg-gray-50/70 rounded-b-lg border-t border-gray-100'; // Slightly darker background, border
+                content.innerHTML = `<ul class="list-disc list-inside space-y-2 text-gray-700 text-base leading-relaxed">${job.details.map(d => `<li>${d}</li>`).join('')}</ul>`;
+
                 itemBox.appendChild(header);
                 itemBox.appendChild(content);
-                contentWrapper.appendChild(itemBox);
-                timelineItem.appendChild(contentWrapper);
-                
-                const icon = document.createElement('div');
-                icon.className = `absolute left-1/2 -translate-y-4 sm:translate-y-0 transform -translate-x-1/2 flex items-center justify-center w-8 h-8 bg-teal-500 rounded-full text-white`;
-                icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>`;
-                
-                itemBox.onclick = () => {
+                itemBox.onclick = (e) => {
+                    // Prevent propagation if clicking on a link inside the box
+                    if (e.target.tagName === 'A') return; 
                     content.classList.toggle('expanded');
+                    // Adjust max-height dynamically if needed based on actual content height
+                    if (content.classList.contains('expanded')) {
+                        content.style.maxHeight = content.scrollHeight + 30 + 'px'; // Add some buffer
+                    } else {
+                        content.style.maxHeight = '0';
+                    }
                 };
+                contentWrapper.appendChild(itemBox);
 
-                // For positioning on the timeline axis
-                const placeholder = document.createElement('div');
-                placeholder.className = 'w-1/2';
-                
+                const iconWrapper = document.createElement('div');
+                iconWrapper.className = `absolute left-1/2 transform -translate-x-1/2 z-10`; // Centralize icon
+
+                const icon = document.createElement('div');
+                icon.className = `timeline-icon flex items-center justify-center w-10 h-10 bg-teal-600 rounded-full text-white flex-shrink-0`; // Larger icon, stronger color
+                icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>`;
+
+                iconWrapper.appendChild(icon);
+
+                // Reorder children based on isLeft for visual timeline effect
                 if (isLeft) {
-                    timelineItem.prepend(contentWrapper);
-                    timelineItem.appendChild(placeholder);
+                    timelineItem.appendChild(iconWrapper); // icon in middle
+                    timelineItem.appendChild(contentWrapper); // content on right
                 } else {
-                    timelineItem.prepend(placeholder);
-                    timelineItem.appendChild(contentWrapper);
+                    timelineItem.appendChild(contentWrapper); // content on left
+                    timelineItem.appendChild(iconWrapper); // icon in middle
                 }
                 
                 timeline.appendChild(timelineItem);
@@ -302,31 +423,43 @@
                     datasets: [{
                         label: 'Proficiency',
                         data: resumeData.skills.chartData.data,
-                        backgroundColor: 'rgba(56, 178, 172, 0.2)',
-                        borderColor: 'rgba(56, 178, 172, 1)',
-                        pointBackgroundColor: 'rgba(56, 178, 172, 1)',
+                        backgroundColor: 'rgba(0, 128, 128, 0.3)', /* Darker teal for fill */
+                        borderColor: 'rgba(0, 128, 128, 1)', /* Stronger teal border */
+                        pointBackgroundColor: 'rgba(0, 128, 128, 1)',
                         pointBorderColor: '#fff',
                         pointHoverBackgroundColor: '#fff',
-                        pointHoverBorderColor: 'rgba(56, 178, 172, 1)'
+                        pointHoverBorderColor: 'rgba(0, 128, 128, 1)',
+                        borderWidth: 2 /* Thicker border for clarity */
                     }]
                 },
                 options: {
                     maintainAspectRatio: false,
                     scales: {
                         r: {
-                            angleLines: { color: 'rgba(0, 0, 0, 0.1)' },
-                            grid: { color: 'rgba(0, 0, 0, 0.1)' },
-                            pointLabels: { font: { size: 12 } },
+                            angleLines: { color: 'rgba(0, 0, 0, 0.15)' }, /* Slightly darker angle lines */
+                            grid: { color: 'rgba(0, 0, 0, 0.15)' }, /* Slightly darker grid lines */
+                            pointLabels: { font: { size: 13, weight: 'bold' }, color: '#4A5568' }, /* Larger, bolder labels */
                             ticks: {
                                 backdropColor: 'transparent',
-                                stepSize: 20
+                                stepSize: 20,
+                                color: '#4A5568' /* Color for tick labels */
                             },
                             suggestedMin: 0,
                             suggestedMax: 100
                         }
                     },
                     plugins: {
-                        legend: { display: false }
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.raw + '%';
+                                }
+                            }
+                        }
                     }
                 }
             });
@@ -335,8 +468,8 @@
             resumeData.skills.tech.forEach(skillCat => {
                 const div = document.createElement('div');
                 div.innerHTML = `
-                    <h4 class="font-bold text-gray-800">${skillCat.category}</h4>
-                    <p class="text-gray-600 text-sm">${skillCat.items}</p>
+                    <h4 class="font-bold text-lg text-gray-800 mb-1">${skillCat.category}</h4>
+                    <p class="text-gray-600 text-sm leading-relaxed">${skillCat.items}</p>
                 `;
                 techListContainer.appendChild(div);
             });
@@ -346,12 +479,12 @@
             const eduContainer = document.getElementById('education-list');
             
             const eduDiv = document.createElement('div');
-            eduDiv.className = 'bg-white p-6 rounded-lg border border-gray-200';
-            let eduHtml = '<h3 class="text-xl font-bold mb-4">Education</h3><div class="space-y-4">';
+            eduDiv.className = 'bg-white p-8 rounded-lg border border-gray-200 shadow-md';
+            let eduHtml = '<h3 class="text-2xl font-bold mb-6 text-gray-900">Education</h3><div class="space-y-6">';
             resumeData.education.forEach(edu => {
                 eduHtml += `
                     <div>
-                        <p class="font-semibold text-gray-800">${edu.degree}</p>
+                        <p class="font-semibold text-gray-800 text-lg">${edu.degree}</p>
                         <p class="text-gray-600">${edu.institution} - ${edu.year}</p>
                     </div>
                 `;
@@ -359,8 +492,8 @@
             eduDiv.innerHTML = eduHtml + '</div>';
 
             const certDiv = document.createElement('div');
-            certDiv.className = 'bg-white p-6 rounded-lg border border-gray-200';
-            let certHtml = '<h3 class="text-xl font-bold mb-4">Certifications</h3><ul class="space-y-2 list-disc list-inside text-gray-700">';
+            certDiv.className = 'bg-white p-8 rounded-lg border border-gray-200 shadow-md';
+            let certHtml = '<h3 class="text-2xl font-bold mb-6 text-gray-900">Certifications</h3><ul class="space-y-3 list-disc list-inside text-gray-700 text-base">';
             resumeData.certifications.forEach(cert => {
                 certHtml += `<li>${cert}</li>`;
             });
@@ -376,12 +509,20 @@
             populateSkills();
             populateEducation();
 
+            // Smooth scrolling for navigation links
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
                     e.preventDefault();
                     document.querySelector(this.getAttribute('href')).scrollIntoView({
                         behavior: 'smooth'
                     });
+                });
+            });
+
+            // Adjust timeline item content max-height on window resize for responsiveness
+            window.addEventListener('resize', () => {
+                document.querySelectorAll('.timeline-item-content.expanded').forEach(content => {
+                    content.style.maxHeight = content.scrollHeight + 30 + 'px';
                 });
             });
         });
