@@ -267,4 +267,265 @@
                     period: "Jul 2023 – Mar 2024",
                     details: [
                         "Delivered <strong>16+ successful LMS/LXP implementations</strong> across APAC, ME, and NA.",
-                        "Boosted presales win rate
+                        "Boosted presales win rate by <strong>35%</strong> through demos and tailored solutions.",
+                        "Reduced go-live time by <strong>15%</strong> by enhancing team collaboration.",
+                        "Achieved <strong>100% SLA adherence</strong> with structured governance."
+                    ]
+                },
+                {
+                    role: "Senior Advisor – Project/Program Management",
+                    company: "Dell Technologies, Bangalore",
+                    period: "Apr 2022 – Apr 2023",
+                    details: [
+                        "Rolled out Dell Sales Application across <strong>24+ countries</strong> (EMEA/APJC).",
+                        "Drove <strong>95% user adoption</strong> in 3 months.",
+                        "Trained <strong>1,500+ stakeholders</strong>; reduced support tickets by <strong>40%</strong>.",
+                        "Standardized messaging for improved engagement and tracking."
+                    ]
+                },
+                {
+                    role: "Manager – Implementation",
+                    company: "Octoze Technologies, Chennai",
+                    period: "Jul 2020 – Jan 2022",
+                    details: [
+                        "Delivered ERP solutions with <strong>100% on-time and in-scope completion</strong>.",
+                        "Improved efficiency with workshops and templates.",
+                        "Strengthened cross-functional coordination."
+                    ]
+                },
+                {
+                    role: "Training & Implementation",
+                    company: "Extramarks Education, Chennai",
+                    period: "Jan 2011 – Jul 2020",
+                    details: [
+                        "Onboarded and trained <strong>300+ schools</strong> across India.",
+                        "Delivered <strong>500+ sessions</strong> for K-12 teachers.",
+                        "Managed cloud-based ERP rollouts with <strong>95% client retention</strong>.",
+                        "Contributed to <strong>25% revenue growth</strong> through sales collaboration."
+                    ]
+                }
+            ],
+            skills: {
+                chartData: {
+                    labels: ['Project Management', 'SaaS Implementation', 'Stakeholder Comms', 'Agile Delivery', 'Risk Management', 'Team Leadership'],
+                    data: [95, 90, 95, 85, 90, 80],
+                },
+                tech: [
+                    { category: 'Project Tools', items: 'Jira, MS Project, Confluence, Trello, ClickUp, Asana' },
+                    { category: 'CRM', items: 'Salesforce, HubSpot, Zoho, Zendesk, Intercom, Freshdesk' },
+                    { category: 'Cloud & BI', items: 'Microsoft Azure, AWS (basic), Power BI, Tableau (basic)' },
+                    { category: 'Automation & APIs', items: 'Postman, Zapier, UAT, BRD/PRD, Flowcharting' },
+                    { category: 'Web & Data', items: 'HTML, CSS, MongoDB, MySQL, SQL' },
+                    { category: 'E-commerce', items: 'Amazon, Shopify, Walmart, ChannelAdvisor, Magento' }
+                ]
+            },
+            education: [
+                {
+                    degree: "MBA, Business Administration",
+                    institution: "Tamil Nadu Open University",
+                    year: "2020"
+                },
+                {
+                    degree: "BBA, Business Administration",
+                    institution: "Tamil Nadu Open University",
+                    year: "2011"
+                }
+            ],
+            certifications: [
+                "Certified Scrum Product Owner® (CSPO) – 2024",
+                "PMP® (in progress – scheduled July)",
+                "Agile with Atlassian Jira",
+                "Azure Essentials",
+                "Agile Scrum Master",
+                "Certified Associate in Project Management (CAPM)",
+                "ITIL® Foundation Certification"
+            ]
+        };
+
+        function populateCompetencies() {
+            const container = document.getElementById('competencies');
+            resumeData.competencies.forEach(comp => {
+                const tag = document.createElement('span');
+                tag.className = 'tag bg-teal-100 text-teal-800 text-sm font-medium px-4 py-2 rounded-full shadow-sm';
+                tag.textContent = comp;
+                container.appendChild(tag);
+            });
+        }
+
+        function populateTimeline() {
+            const timeline = document.getElementById('timeline');
+            resumeData.experience.forEach((job, index) => {
+                const isLeft = index % 2 === 0;
+                const timelineItem = document.createElement('div');
+                timelineItem.className = `timeline-item mb-12 flex items-center ${isLeft ? 'justify-start flex-row-reverse' : 'justify-start'}`; // Adjusted for cleaner layout
+
+                const contentWrapper = document.createElement('div');
+                contentWrapper.className = `w-1/2 ${isLeft ? 'pr-10 text-right' : 'pl-10 text-left'}`; // More spacing and text alignment
+
+                const itemBox = document.createElement('div');
+                itemBox.className = 'bg-white border border-gray-200 rounded-lg shadow-xl cursor-pointer hover:shadow-2xl transition-shadow duration-300'; // Stronger shadow, hover effect
+
+                const header = document.createElement('div');
+                header.className = 'p-6 pb-2 rounded-t-lg'; // More padding
+                header.innerHTML = `
+                    <p class="font-bold text-xl text-gray-900 mb-1">${job.role}</p>
+                    <p class="text-teal-700 font-semibold text-lg mb-1">${job.company}</p>
+                    <p class="text-sm text-gray-500">${job.period}</p>
+                `;
+
+                const content = document.createElement('div');
+                content.className = 'timeline-item-content bg-gray-50/70 rounded-b-lg border-t border-gray-100'; // Slightly darker background, border
+                content.innerHTML = `<ul class="list-disc list-inside space-y-2 text-gray-700 text-base leading-relaxed">${job.details.map(d => `<li>${d}</li>`).join('')}</ul>`;
+
+                itemBox.appendChild(header);
+                itemBox.appendChild(content);
+                itemBox.onclick = (e) => {
+                    // Prevent propagation if clicking on a link inside the box
+                    if (e.target.tagName === 'A') return; 
+                    content.classList.toggle('expanded');
+                    // Adjust max-height dynamically if needed based on actual content height
+                    if (content.classList.contains('expanded')) {
+                        content.style.maxHeight = content.scrollHeight + 30 + 'px'; // Add some buffer
+                    } else {
+                        content.style.maxHeight = '0';
+                    }
+                };
+                contentWrapper.appendChild(itemBox);
+
+                const iconWrapper = document.createElement('div');
+                iconWrapper.className = `absolute left-1/2 transform -translate-x-1/2 z-10`; // Centralize icon
+
+                const icon = document.createElement('div');
+                icon.className = `timeline-icon flex items-center justify-center w-10 h-10 bg-teal-600 rounded-full text-white flex-shrink-0`; // Larger icon, stronger color
+                icon.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 0 00-2 2v10a2 0 002 2h12a2 0 002-2V6a2 0 00-2-2h-1V3a1 0 10-2 0v1H7V3a1 0 00-1-1zm0 5a1 0 000 2h8a1 0 100-2H6z" clip-rule="evenodd" /></svg>`;
+
+                iconWrapper.appendChild(icon);
+
+                // Reorder children based on isLeft for visual timeline effect
+                if (isLeft) {
+                    timelineItem.appendChild(iconWrapper); // icon in middle
+                    timelineItem.appendChild(contentWrapper); // content on right
+                } else {
+                    timelineItem.appendChild(contentWrapper); // content on left
+                    timelineItem.appendChild(iconWrapper); // icon in middle
+                }
+                
+                timeline.appendChild(timelineItem);
+            });
+        }
+        
+        function populateSkills() {
+            const ctx = document.getElementById('skillsChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: resumeData.skills.chartData.labels,
+                    datasets: [{
+                        label: 'Proficiency',
+                        data: resumeData.skills.chartData.data,
+                        backgroundColor: 'rgba(0, 128, 128, 0.3)', /* Darker teal for fill */
+                        borderColor: 'rgba(0, 128, 128, 1)', /* Stronger teal border */
+                        pointBackgroundColor: 'rgba(0, 128, 128, 1)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgba(0, 128, 128, 1)',
+                        borderWidth: 2 /* Thicker border for clarity */
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        r: {
+                            angleLines: { color: 'rgba(0, 0, 0, 0.15)' }, /* Slightly darker angle lines */
+                            grid: { color: 'rgba(0, 0, 0, 0.15)' }, /* Slightly darker grid lines */
+                            pointLabels: { font: { size: 13, weight: 'bold' }, color: '#4A5568' }, /* Larger, bolder labels */
+                            ticks: {
+                                backdropColor: 'transparent',
+                                stepSize: 20,
+                                color: '#4A5568' /* Color for tick labels */
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 100
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                            titleColor: '#fff',
+                            bodyColor: '#fff',
+                            callbacks: {
+                                label: function(context) {
+                                    return context.label + ': ' + context.raw + '%';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const techListContainer = document.getElementById('tech-skills-list');
+            resumeData.skills.tech.forEach(skillCat => {
+                const div = document.createElement('div');
+                div.innerHTML = `
+                    <h4 class="font-bold text-lg text-gray-800 mb-1">${skillCat.category}</h4>
+                    <p class="text-gray-600 text-sm leading-relaxed">${skillCat.items}</p>
+                `;
+                techListContainer.appendChild(div);
+            });
+        }
+        
+        function populateEducation() {
+            const eduContainer = document.getElementById('education-list');
+            
+            const eduDiv = document.createElement('div');
+            eduDiv.className = 'bg-white p-8 rounded-lg border border-gray-200 shadow-md';
+            let eduHtml = '<h3 class="text-2xl font-bold mb-6 text-gray-900">Education</h3><div class="space-y-6">';
+            resumeData.education.forEach(edu => {
+                eduHtml += `
+                    <div>
+                        <p class="font-semibold text-gray-800 text-lg">${edu.degree}</p>
+                        <p class="text-gray-600">${edu.institution} - ${edu.year}</p>
+                    </div>
+                `;
+            });
+            eduDiv.innerHTML = eduHtml + '</div>';
+
+            const certDiv = document.createElement('div');
+            certDiv.className = 'bg-white p-8 rounded-lg border border-gray-200 shadow-md';
+            let certHtml = '<h3 class="text-2xl font-bold mb-6 text-gray-900">Certifications</h3><ul class="space-y-3 list-disc list-inside text-gray-700 text-base">';
+            resumeData.certifications.forEach(cert => {
+                certHtml += `<li>${cert}</li>`;
+            });
+            certDiv.innerHTML = certHtml + '</ul>';
+
+            eduContainer.appendChild(eduDiv);
+            eduContainer.appendChild(certDiv);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            populateCompetencies();
+            populateTimeline();
+            populateSkills();
+            populateEducation();
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Adjust timeline item content max-height on window resize for responsiveness
+            window.addEventListener('resize', () => {
+                document.querySelectorAll('.timeline-item-content.expanded').forEach(content => {
+                    content.style.maxHeight = content.scrollHeight + 30 + 'px';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
