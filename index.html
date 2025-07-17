@@ -158,6 +158,113 @@
                 <a href="#skills" class="nav-link text-lg">Skills</a>
                 <a href="#education" class="nav-link text-lg">Education</a>
                 
-                <a href="MENA%20CV%20PDF%20MAY%2023.pdf" download="Meiyappan_Rm_Resume.pdf" class="download-button bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-full shadow-lg transition duration-300 ease-in-out">
+                <a href="https://raw.githubusercontent.com/RamMeiyappan/my-portfolio/92e0f2617a30502863ea78e5858d9ac2d8f5d5ca/MENA%20CV%20PDF%20MAY%2023.pdf" download="MENA CV PDF MAY 23.pdf" class="download-button bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-5 rounded-full shadow-lg transition duration-300 ease-in-out">
                     Download CV (PDF)
                 </a>
+
+                <button onclick="window.print()" class="print-button bg-teal-600 hover:bg-teal-700 text-white font-bold py-2 px-5 rounded-full shadow-lg transition duration-300 ease-in-out">
+                    Print / Save as PDF
+                </button>
+            </div>
+            </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-16">
+        <section class="text-center mb-20">
+            <h1 class="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">Project Manager & Implementation Leader</h1>
+            <p class="max-w-4xl mx-auto text-gray-700 text-lg mb-8 leading-relaxed">
+                A highly effective **Project Manager and Senior Implementation Leader** with over **15 years of impactful experience**. I specialize in spearheading **SaaS-based implementations, ERP, and LMS rollouts** across diverse global markets. My expertise lies in end-to-end project execution, fostering robust cross-functional collaboration, proactive risk mitigation, and ensuring seamless post-go-live support. As a **Certified Scrum Product Owner (CSPO)**, I consistently deliver complex projects on time, within scope, and exceeding stakeholder expectations.
+            </p>
+            <div class="flex justify-center items-center space-x-6 text-base text-gray-600 font-medium">
+                <span>📞 +91 9487413140</span>
+                <span class="text-gray-400">|</span>
+                <span>📧 mena@aol.in</span>
+                <span class="text-gray-400">|</span>
+                <a href="https://linkedin.com/in/ramamena" target="_blank" class="nav-link flex items-center">
+                    <svg class="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.02h-2.5v16.48h2.5v-16.48zm7.98 0h-2.5v16.48h2.5v-8.79c0-4.09 3.06-4.48 3.73-1.61v10.4h2.5v-10.7c0-5.84-3.56-6.47-5.46-2.58z"></path></svg>
+                    LinkedIn
+                </a>
+            </div>
+        </section>
+
+        <hr class="border-t border-gray-300 my-16">
+
+        <section class="mb-20">
+            <h2 class="text-4xl font-bold text-center mb-10 text-gray-900">Core Competencies</h2>
+            <div id="competencies" class="flex flex-wrap justify-center gap-4">
+                </div>
+        </section>
+        
+        <hr class="border-t border-gray-300 my-16">
+
+        <section id="experience" class="mb-20">
+            <h2 class="text-4xl font-bold text-center mb-14 text-gray-900">Professional Experience</h2>
+            <p class="text-center text-gray-700 text-lg mb-14 max-w-3xl mx-auto">
+                A journey of growth and impact. My career has been focused on delivering complex technical solutions and driving operational excellence. Click on any role to see the key achievements and responsibilities.
+            </p>
+            <div id="timeline" class="relative max-w-4xl mx-auto">
+                <div class="absolute left-1/2 h-full w-1 bg-teal-300 transform -translate-x-1/2 timeline-line"></div>
+                </div>
+        </section>
+
+        <hr class="border-t border-gray-300 my-16">
+
+        <section id="skills" class="mb-20">
+            <h2 class="text-4xl font-bold text-center mb-14 text-gray-900">Technical Skills & Proficiencies</h2>
+            <p class="text-center text-gray-700 text-lg mb-14 max-w-3xl mx-auto">
+                A versatile skill set for modern project challenges. The chart below highlights core strengths, followed by a detailed list of the technical tools I command.
+            </p>
+            <div class="grid md:grid-cols-5 gap-16 items-center">
+                <div class="md:col-span-3">
+                    <div class="chart-container shadow-lg rounded-lg p-4 bg-white">
+                        <canvas id="skillsChart"></canvas>
+                    </div>
+                </div>
+                <div id="tech-skills-list" class="md:col-span-2 space-y-8 bg-white p-6 rounded-lg shadow-md border border-gray-100">
+                    </div>
+            </div>
+        </section>
+
+        <hr class="border-t border-gray-300 my-16">
+
+        <section id="education">
+            <h2 class="text-4xl font-bold text-center mb-14 text-gray-900">Education & Certifications</h2>
+            <div id="education-list" class="max-w-5xl mx-auto grid md:grid-cols-2 gap-10">
+                </div>
+        </section>
+    </main>
+    
+    <footer class="text-center py-8 mt-20 border-t border-gray-200 bg-gray-50 text-gray-600">
+        <p class="max-w-xl mx-auto">&copy; 2024 Meiyappan Rm. Crafted with a blend of professional experience and modern web technologies for a truly interactive presentation.</p>
+    </footer>
+
+    <script>
+        const resumeData = {
+            competencies: [
+                "Project Lifecycle Management", "SaaS Implementation", "Stakeholder Engagement",
+                "Agile & Waterfall Delivery", "Team Leadership", "Risk & Issue Management",
+                "Client Onboarding", "KPI Tracking", "T & QA", "Process Optimization",
+                "CRM Platforms", "Cross-Functional Collaboration", "Change Management",
+                "Vendor Management", "Budgeting & Forecasting", "Post-Go-Live Support"
+            ],
+            experience: [
+                {
+                    role: "Associate Manager – Implementation & Onboarding",
+                    company: "MediaMint, Hyderabad",
+                    period: "Oct 2024 – Present",
+                    details: [
+                        "Delivered <strong>30+ projects</strong> with <strong>95% on-time rate</strong> and high stakeholder satisfaction.",
+                        "Cut delays by <strong>20%</strong> via resource optimization and cross-functional planning.",
+                        "Built dashboards to accelerate executive decisions by <strong>40%</strong>.",
+                        "Reduced onboarding time by <strong>35%</strong> using standardized SOPs.",
+                        "Improved productivity by <strong>40%</strong> through automation.",
+                        "Ensured <strong>100% successful handovers</strong> to customer success teams."
+                    ]
+                },
+                {
+                    role: "Manager – Implementation",
+                    company: "Disprz, Chennai",
+                    period: "Jul 2023 – Mar 2024",
+                    details: [
+                        "Delivered <strong>16+ successful LMS/LXP implementations</strong> across APAC, ME, and NA.",
+                        "Boosted presales win rate
